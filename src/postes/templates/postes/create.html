@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="" style="display: flex; flex-direction: column;">
+    <div class="flex flex-col items-center mb-12 space-y-4">
+        <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+        Créer un post
+        </h2>  
+    </div>
+    <form action="" method="post" class="m-auto" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="text" name="id" value="{{ post.id }}" hidden>
+        <div
+              class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800"
+            >
+              <div>
+                <label class="block mt-4 text-sm">
+                    <span class="text-gray-700 dark:text-gray-400">
+                      Titre
+                    </span>
+                    <input name="title"
+                      class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
+                      placeholder="Entrez le titre de votre post" value="{{ post.name }}" required
+                    />
+                    <span class="text-xs text-gray-600 dark:text-gray-400">
+                    </span>
+                </label>
+                <div class="flex flex-col items-center mt-4">
+                    <div class="border flex flex-col items-center" style="width: 400px;">
+                        {% if  1 %}
+                            <img src="{{ post.media.url }}" alt="photo_profil" id="profil_object" width="200" height="200" size>
+                        {% else %}
+                            <video controls width="250">
+                                <source src="{{ post.media.url }}" type="video/mp4">
+                            </video>
+                        {% endif %}
+                    </div>
+                    <input name="media" class="mt-4" type="file" onchange="previewPicture(this)" id="media" value="{{ post.media.url }}"
+                              accept="image/jpg, image/jpeg, image/png, image/jpeg" required>
+                </div>
+              </div>
+              <label class="block mt-4 text-sm">
+                <span class="text-gray-700 dark:text-gray-400">
+                  Description
+                </span>
+                <textarea rows="10" name="description"
+                  class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
+                  placeholder="Entrez une description de votre post" required
+                >{{ post.description }}</textarea>
+                <span class="text-xs text-gray-600 dark:text-gray-400">
+                </span>
+              </label>
+              <button type="submit" class="w-full px-2 py-2 mt-4 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" aria-label="Delete">
+                       Publier
+              </button>
+
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts%}
+  <script>
+        var image = document.getElementById("profil_object");
+        var types = ["image/jpg", "image/jpeg", "image/png"];
+        var previewPicture = function(e){
+            const [picture] = e.files;
+            if (types.includes(picture.type)){
+                profil_object.src = URL.createObjectURL(picture);
+            }
+        }
+  </script>
+{% endblock %}

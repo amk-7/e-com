@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bg-primary-post {
+    @apply bg-gray-300;
+}
+
+hr {
+    @apply border-black;
+}
+
+.card {
+    @apply bg-white border border-solid border-black mb-4;
+}
+
+.like-share {
+    @apply flex space-x-4;
+}
+
+.svg {
+    @apply h-6 cursor-pointer;
+}
+
+.post-content {
+    @apply flex flex-col items-center;
+}
+

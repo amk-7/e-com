@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="flex flex-col items-center mb-12 space-y-4">
+    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+        Mon panier
+    </h2>
+</div>
+{% if not orders %}
+<h3 class="text-center dark:text-white">Vous n'avez pas encore de panier.</h3>
+{% else %}
+<div class="flex flex-col">
+    <form action="{% url 'ventes:purchase-cart' %}" method="get">
+        {% csrf_token %}
+        <input type="submit" name="purchase" value="Acheter" style="width: 100px;"
+        class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" />
+    </form>
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="flex flex-col">
+            {% for order in orders %}
+            <div class="flex items-center p-6 bg-gray-50 dark:bg-gray-900">
+                <div class="flex-1 max-w-4xl mx-auto overflow-hidden bg-white rounded-lg shadow-xl dark:bg-gray-800">
+                    <div class="flex flex-col overflow-y-auto md:flex-row">
+                        <div class="md:h-auto md:w-1/2" style="border-right: solid 1px gray;">
+                            <img aria-hidden="true" class="object-cover w-full h-full  dark:hidden"
+                                src="{{ order.thumbnail }}" alt="Office" />
+                            <img aria-hidden="true" class="hidden object-cover w-full h-full dark:block"
+                                src="{{ order.thumbnail }}" alt="Office" />
+                        </div>
+                        <div class="flex items-center justify-center p-6 sm:p-12 md:w-1/2">
+                            <div class="w-full">
+                                <h2 class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">
+                                    {{ order.name }}
+                                </h2>
+                                <div>
+                                    <h5 class="text-xl font-semibold tracking-tight text-gray-500 dark:text-gray-500">{{order.categorie }}</h5>
+                                    <span class="text-xl font-bold text-gray-900 dark:text-white">{{order.price }} FCFA</span>
+                                </div>
+                                <label class="block text-sm">
+                                    <span class="text-gray-700 dark:text-gray-400">Quantity</span>
+                                    <input type="text" name="ids[]" id="ids" value="{{ order.id }}" hidden>
+                                    <input
+                                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                        type="number" name="quantity[]" value="{{ order.quantity }}" />
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--div class="w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex">
+                            <a href="{ % url 'ventes:article' order.article.id % }">
+                                <img class="p-8 rounded-t-lg h-96" src="{{ order.article.thumbnail.url }}" alt="{{ article.designation }}" />
+                            </a>
+                            <div class="px-5">
+                                <div href="" class="flex space-x-5">
+                                    <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{{ order.article.designation }}</h5>
+                                    <div class="flex items-center mt-2.5">
+                                        <svg aria-hidden="true" class="w-5 h-5 text-yellow-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>First star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                        <svg aria-hidden="true" class="w-5 h-5 text-yellow-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Second star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                        <svg aria-hidden="true" class="w-5 h-5 text-yellow-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Third star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                        <svg aria-hidden="true" class="w-5 h-5 text-yellow-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Fourth star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                        <svg aria-hidden="true" class="w-5 h-5 text-yellow-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Fifth star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-3">{{ order.article.note }}</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h5 class="text-xl font-semibold tracking-tight text-gray-500 dark:text-white">{{ order.article.categorie }}</h5>
+                                    <span class="text-xl font-bold text-gray-900 dark:text-white">{{ order.article.getSalePrice }} FCFA</span>
+                                </div>
+                                <div class=" flex flex-col items-center justify-between">
+                                    <div>
+                                        <label for="quantity">Quantity : </label>
+                                        <input type="text" name="ids[]" id="ids" value="{{ order.id }}" hidden>
+                                        <input class="border" type="number" name="quantity[]" id="quantity" value="{{ order.quantity }}">
+                                    </div>
+                                    <a href="#" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Modifier</a>
+                                </div>
+                            </div>
+                        </div-->
+            {% endfor %}
+            <div class="flex flex-col items-center justify-between" style="margin-top: 64px; margin-bottom: 68px;">
+                <div>
+                    <input type="submit" name="delete" value="Supprimer le panier"
+                        class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" />
+                    <input type="submit" name="update" value="Mettre a jour"
+                        class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" />
+                </div>
+            </div>
+        </div>
+        <!--div class="mt-8 flex justify-between">
+                    <input type="submit" value="Supprimer le panier" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"/>
+                    <input type="submit" name="update" value="Mettre à jour le panier" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"/>
+                </div-->
+    </form>
+</div>
+{% endif %}
+
+
+
+{% endblock %}

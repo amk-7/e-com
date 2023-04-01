@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="flex flex-col items-center mb-12 space-y-4">
+        <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+          Sous categories de <span id="wording_title" >{{ categorie.wording }}</span>
+        </h2>  
+    </div>
+    <div class="">
+      <label class="block text-sm">
+        <span class="text-gray-700 dark:text-gray-400">Categorie</span>
+        <input type="text" name="" id="id" value="{{ categorie.id }}" hidden>
+      </label>
+      <div class="flex space-x-6">
+        <input
+          class="w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+          placeholder="La designation"
+          name=""
+          id="wording"
+          value="{{ categorie.wording }}"
+          />
+          <button type="button" onclick="updateCategorie()" class="flex items-center p-2 justify-between text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" aria-label="Delete">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
+            </svg>
+          </button>
+      </div>
+      <div class="mt-4">
+        <label class="block text-sm">
+          <span class="text-gray-700 dark:text-gray-400">Sous categorie</span>
+          <input type="text" name="" id="sub_id" value="" hidden>
+        </label>
+        <div class="flex space-x-6">
+          <input
+            class="w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+            placeholder="La designation"
+            name=""
+            id="sub_wording"
+            value=""
+            />
+            <button type="button" onclick="updateSubCategorie()" class="flex items-center p-2 justify-between text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" aria-label="Delete">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
+              </svg>
+            </button>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+<script>
+  let wording_title_tag = document.getElementById('wording_title');
+  let id_tag = document.getElementById('id');
+  let wording_tag = document.getElementById('wording');
+
+  function updateCategorie(){
+    $.ajax({
+        type: "POST",
+        url: "{% url 'ventes:create-categorie' %}",
+        data: {
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+          wording: wording_tag.value,
+          id: id_tag.value
+        },
+        success: function(reponse){
+          //$('#'+reponse.id).children()[1].innerText=reponse.result;
+          wording_tag.value = reponse.result;
+          id_tag.value=reponse.id;
+          wording_title_tag.innerText = reponse.result;
+        },
+        error: function(xhr, textStatus, errorThrown){
+          alert("Erreur");
+          wording.value = "";
+        }
+    });
+  }
+
+  let sub_id_tag = document.getElementById('sub_id');
+  let sub_wording_tag = document.getElementById('sub_wording');
+  sub_wording_tag.value="";
+  
+  function setSubId(id, libelle){
+    sub_id_tag.value = id;
+    sub_wording_tag.value = libelle;
+  }
+
+  function updateSubCategorie(){
+    $.ajax({
+        type: "POST",
+        url: "{% url 'ventes:create-sub-categorie' %}",
+        data: {
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+          wording: sub_wording_tag.value,
+          id: sub_id_tag.value,
+          categorie_id: id_tag.value,
+        },
+        success: function(reponse){
+          sub_wording_tag.value = "";
+          sub_id_tag.value="";
+          $('#'+reponse.id).children()[1].innerText=reponse.result;
+          $('#'+reponse.id).children()[2].addEventListener('click', function(e){
+            setSubId(reponse.id, reponse.result)
+          });
+        },
+        error: function(xhr, textStatus, errorThrown){
+          alert("Erreur");
+          sub_wording_tag.value = "";
+        }
+    });
+  }
+
+</script>
+{% endblock %}

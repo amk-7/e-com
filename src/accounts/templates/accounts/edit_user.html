@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form method="post" action="" class="flex flex-col items-center">
+{% csrf_token %}
+    <div class="flex flex-col">
+        <label for="id">Nom</label>
+        <input class="border" type="text" name="id" id="id" value="{{ user.id }}">
+    </div>
+    <div class="flex flex-col">
+        <label for="first_name">Nom</label>
+        <input class="border" type="text" name="fname" id="fname" value="{{ user.first_name }}">
+    </div>
+    <div class="flex flex-col">
+        <label for="last_name">Prenom</label>
+        <input class="border" type="text" name="lname" id="lname" value="{{ user.last_name }}">
+    </div>
+    <div class="flex flex-col">
+        <label for="username">Nom d'utilisateur</label>
+        <input class="border" type="text" name="username" id="username" value="{{ user.username }}">
+    </div>
+    <div class="flex flex-col">
+        <label for="email">email</label>
+        <input class="border" type="email" name="email" id="email" value="{{ user.email }}">
+    </div>
+    <div class="flex flex-col">
+        <label for="password">password</label>
+        <input class="border" type="password" name="password" id="password" value="">
+    </div>
+    <div class="flex flex-col">
+        <label for="">Adresse</label>
+        <table>
+            <td>
+                <label for="ville">ville</label>
+                <input class="border" type="text" name="ville" id="ville" value="sokodé">
+            </td>
+            <td>
+                <label for="quartier">Quartier</label>
+                <input class="border" type="text" name="quartier" id="quartier" value="komah">
+            </td>
+            <td>
+                <label for="lieu">Lieu de résidance</label>
+                <input class="border" type="text" name="lieu" id="lieu" value="rf">
+            </td>
+        </table>
+    </div>
+    <div class="flex flex-col">
+        <label for="contact">contact</label>
+        <input class="border" type="tel" name="contact" id="contact" value="{{ user.contact }}">
+    </div>
+    <input type="submit" value="s'inscrire" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+</form>
+
+{# Assumes you set up the password_reset view in your URLconf #}
+
+{% endblock %}

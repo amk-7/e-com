@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+  /*main {
+    background-color: yellow;
+  }*/
+  @media screen and (max-width: 600px) {
+    .card-list {
+      margin-left: 50px;
+    }
+  }
+
+  /*@media screen and (min-width: 1133px) {
+    main {
+      background-color: red;
+    }
+  }*/
+</style>
+<div class="flex flex-col items-center mb-12 space-y-4">
+  <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+    Liste des articles
+  </h2>
+</div>
+<form action="" method="post">
+  {% csrf_token %}
+  <div id="search" class="flex flex-col items-center mb-12 space-y-4" style="margin-bottom: 50px;">
+    <div class="flex">
+      <input name="search"
+        class="block mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
+        placeholder="Search value ..." value="" />
+      <select name="categorie" id=""
+        class="ml-3 block mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input">
+        <option value="">--Categorie--</option>
+        {% for categorie in categories %}
+        <option value="{{ categorie.id }}">{{ categorie.wording }}</option>
+        {% endfor %}
+      </select>
+      <button
+        class="ml-3 p-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+          class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</form>
+{% if not articles %}
+<h3 class="text-center">Il n'y aucun article dans la boutique.</h3>
+{% else %}
+{% if not is_manager %}
+<div class="flex" style="flex-wrap: wrap;">
+  {% for article in articles %}
+  <div class="flex flex-col mr-3 items-center min-w-0 p-4 mt-2 bg-white rounded-lg shadow-xs dark:bg-gray-800 card-list"
+    style="width: 350px; margin-bottom: 20px;">
+    <a href="{% url 'ventes:article' article.id %}">
+      <img class="p-8 rounded-lg" src="{{ article.thumbnail.url }}" alt="{{ article.designation }}"
+        style="height: 412px; width: 300px;" />
+    </a>
+    <div class="px-5 pb-5 flex justify-between text-center">
+      <div>
+        <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{{ article.designation }}</h5>
+        <h5 class="font-semibold tracking-tight text-gray-500 dark:text-gray-500">{{ article.showSubCategorie }}</h5>
+      </div>
+      <div class="" style="margin-left: 15px;">
+        <span class="text-xl font-bold text-gray-900 dark:text-white mr-3">{{ article.getSalePrice }} FCFA</span>
+        <p class="flex flex-row">
+          <svg style="margin-top: 5px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-telephone-inbound-fill" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511zM15.854.146a.5.5 0 0 1 0 .708L11.707 5H14.5a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 1 0v2.793L15.146.146a.5.5 0 0 1 .708 0z" />
+          </svg>
+          <span style="color: rgb(13, 119, 13);">{{ phone_number }}</span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="flex flex-col mr-3 items-center min-w-0 p-4 mt-2 bg-white rounded-lg shadow-xs dark:bg-gray-800 card-list"
+  style="width: 350px; margin-bottom: 20px;">
+  <a href="{% url 'ventes:article' article.id %}">
+    <img class="p-8 rounded-lg" src="{{ article.thumbnail.url }}" alt="{{ article.designation }}"
+      style="height: 412px; width: 300px;" />
+  </a>
+  <div class="px-5 pb-5 flex justify-between text-center">
+    <div>
+      <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{{ article.designation }}</h5>
+      <h5 class="font-semibold tracking-tight text-gray-500 dark:text-gray-500">{{ article.showSubCategorie }}</h5>
+    </div>
+    <div class="" style="margin-left: 15px;">
+      <span class="text-xl font-bold text-gray-900 dark:text-white mr-3">{{ article.getSalePrice }} FCFA</span>
+      <p class="flex flex-row">
+        <svg style="margin-top: 5px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+          class="bi bi-telephone-inbound-fill" viewBox="0 0 16 16">
+          <path fill-rule="evenodd"
+            d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511zM15.854.146a.5.5 0 0 1 0 .708L11.707 5H14.5a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 1 0v2.793L15.146.146a.5.5 0 0 1 .708 0z" />
+        </svg>
+        <span style="color: rgb(13, 119, 13);">{{ phone_number }}</span>
+      </p>
+    </div>
+  </div>
+</div>
+  {% endfor %}
+</div>
+{% else %}
+<form action="{% url 'ventes:articles' %}" method="get" class="mb-8">
+  {% csrf_token %}
+  <button type="submit"
+    class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+    aria-label="Delete">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-plus-lg"
+      viewBox="0 0 16 16">
+      <path fill-rule="evenodd"
+        d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z" />
+    </svg>
+  </button>
+</form>
+<div class="w-full overflow-hidden rounded-lg shadow-xs">
+  <div class="w-full overflow-x-auto">
+    <table class="w-full whitespace-no-wrap">
+      <thead>
+        <tr
+          class="text-xs text-center font-semibold tracking-wide items-center text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+          <th class="px-4 py-3">Image</th>
+          <th class="px-4 py-3">Désignation</th>
+          <th class="px-4 py-3">Prix vente</th>
+          <th class="px-4 py-3">Stock</th>
+          <th class="px-4 py-3">Note</th>
+          <th class="px-4 py-3">Categorie</th>
+          <th class="px-4 py-3">Action</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+        {% for article in articles %}
+        <tr class="text-gray-700 dark:text-gray-400 text-center">
+          <td class="px-4 py-3">
+            <div class="flex items-center text-sm">
+              <!-- Avatar with inset shadow -->
+              <div class="relative hidden w-12 h-12 mr-3 md:block">
+                <img class="object-cover w-full h-full" src="{{ article.thumbnail.url }}"
+                  alt="{{ article.designation }}" loading="lazy" />
+              </div>
+          </td>
+          <td class="px-4 py-3 text-sm">{{ article.designation }}</td>
+          <td class="px-4 py-3 text-xs">{{ article.getSalePrice }} FCFA </td>
+          <td class="px-4 py-3 text-sm">{{ article.stock }}</td>
+          <td class="px-4 py-3 text-sm">{{ article.note }}</td>
+          <td class="px-4 py-3 text-sm">{{ article.showSubCategorie }}</td>
+          <td class="px-4 py-3 text-sm flex justify-between ml-3 mr-3">
+            <a href="{% url 'ventes:article' article.id %}"
+              class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+              aria-label="Edit">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-plus-lg"
+                viewBox="0 0 16 16">
+                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
+                <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
+              </svg>
+            </a>
+            <form action="{% url 'ventes:articles' %}" method="get">
+              {% csrf_token %}
+              <input type="text" name="id" value="{{ article.id }}" hidden>
+              <button type="submit"
+                class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                aria-label="Delete">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                  class="bi bi-pencil-square" viewBox="0 0 16 16">
+                  <path
+                    d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                  <path fill-rule="evenodd"
+                    d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                </svg>
+              </button>
+            </form>
+            <a href="{% url 'ventes:article-delete' article.id %}"
+              class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+              aria-label="Delete">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-plus-lg"
+                viewBox="0 0 16 16">
+                <path
+                  d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
+              </svg>
+            </a>
+
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+{% endif %}
+{% endblock %}

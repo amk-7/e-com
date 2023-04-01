@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="flex flex-col items-center mb-12 space-y-4">
+        <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+        Details de l'article : {{ article.designation }}
+        </h2>  
+    </div>
+    <div class="flex items-center p-6 bg-gray-50 dark:bg-gray-900">
+        <div class="flex-1 max-w-4xl mx-auto overflow-hidden bg-white rounded-lg shadow-xl dark:bg-gray-800">
+        <div class="flex flex-col overflow-y-auto md:flex-row">
+            <div class="md:h-auto md:w-1/2" style="border-right: solid 1px gray;">
+                <img
+                    aria-hidden="true"
+                    class="object-cover w-full h-full  dark:hidden"
+                    src="{{ article.thumbnail.url }}"
+                    alt="Office"
+                />
+                <img
+                    aria-hidden="true"
+                    class="hidden object-cover w-full h-full dark:block"
+                    src="{{ article.thumbnail.url }}"
+                    alt="Office"
+                />
+            </div>
+            <div class="flex items-center justify-center p-6 sm:p-12 md:w-1/2">
+            <div class="w-full">
+                <h2 class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">
+                    {{ article.designation }} 
+                </h2>
+                <div>
+                    <div class="flex flex-col ">
+                        <span class="mt-4 text-xl font-bold text-gray-900 dark:text-white mt-2.5">{{ article.getSalePrice }} FCFA / unité</span>
+                        <h5 class="text-xl font-semibold tracking-tight text-gray-500 dark:text-white mt-2.5">{{ article.categorie }}</h5>  
+                    </div> 
+                    <div class="mt-4">
+                        <p class="max-w-sm dark:text-white">{{ article.description }}</p>
+                        <p class="flex flex-row">
+                            <svg style="margin-top: 5px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-telephone-inbound-fill" viewBox="0 0 16 16">
+                              <path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511zM15.854.146a.5.5 0 0 1 0 .708L11.707 5H14.5a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 1 0v2.793L15.146.146a.5.5 0 0 1 .708 0z"/>
+                            </svg>
+                            <span style="color: rgb(13, 119, 13);">{{ phone_number }}</span>
+                        </p>
+                    </div> 
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+{% endblock %}

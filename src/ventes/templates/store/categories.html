@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="flex flex-col items-center mb-12 space-y-4">
+        <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+          Liste des categories
+        </h2>  
+    </div>
+    <div class="">
+      <form action="{% url 'ventes:create-categorie' %}" method="post">
+        {% csrf_token %}
+        <label class="block text-sm">
+          <span class="text-gray-700 dark:text-gray-400">Designation</span>
+        </label>
+        <div class="flex space-x-6">
+          <input
+            class="w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+            placeholder="La designation"
+            name="wording"
+            id="wording"
+            />
+            <button type="submit" onclick="" class="flex items-center p-2 justify-between text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" aria-label="Delete">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
+              </svg>
+            </button>
+        </div>
+      </form>
+    </div>
+    {% if not categories %}
+        <h3 class="mt-16">Il n'y aucune categories.</h3>
+    {% else %}
+          <div class="w-full overflow-hidden rounded-lg shadow-xs mt-16">
+            <div class="w-full overflow-x-auto">
+              <table class="w-full whitespace-no-wrap">
+                <thead>
+                  <tr
+                  class="text-xs text-center font-semibold tracking-wide items-center text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
+                  >
+                    <th class="px-4 py-3">N°</th>
+                    <th class="px-4 py-3">Désignation</th>
+                    <th class="px-4 py-3">Action</th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                    {% for categorie in categories %}
+                        <tr class="text-gray-700 dark:text-gray-400" id="{{ categorie.id }}">
+                            <td class="px-4 py-3 text-sm">{{ categorie.id }}</td>
+                            <td class="px-4 py-3 text-xs">{{ categorie.wording }}</td>
+                            <td class="px-4 py-3 text-sm flex justify-center ml-3 mr-3">
+                              <a href="{% url 'ventes:delete-categorie' categorie.id %}" class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" aria-label="Delete">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                  <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/> 
+                                </svg>
+                              </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+    {% endif %}
+{% endblock %}

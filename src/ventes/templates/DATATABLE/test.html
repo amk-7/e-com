@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <style>
+        .scrollable-div {
+            overflow-y: scroll;
+            max-height: 500px;
+            /* Réglez la hauteur maximale de la div en fonction de vos besoins */
+        }
+
+        .flex {
+            display: flex;
+        }
+        .flex-col {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+</head>
+
+<body style="background-color: rgba(167, 172, 182, 0.801);">
+    <main class="d-flex flex-column m-auto">
+        <div class="flex align-items-center m-auto">
+            <div style="width: 350px;">
+                <h1>Portefeuille</h1>
+                <h2>Cartes et comptes</h2>
+                <div class="scrollable-div ">
+                    <hr>
+                    <div class="d-flex">
+                        <img src="./add.png" alt="" height="70px">
+                        <p style="width: 300px; text-align: left; margin-left: 10px;">
+                            <a href="">
+                                Ajouter un mode de paiement
+                                (Cartes de crédit ou de débit, compte bancaire ou autres)
+                            </a>
+                        </p>
+                    </div>
+                    <hr>
+                    <div class="d-flex">
+                        <img src="./add.png" alt="" height="70px">
+                        <p style="width: 300px; text-align: left; margin-left: 10px;">
+                            <a href="">
+                                Ajouter un mode de paiement
+                                (Cartes de crédit ou de débit, compte bancaire ou autres)
+                            </a>
+                        </p>
+                    </div>
+                    <hr>
+                    <div class="d-flex">
+                        <img src="./add.png" alt="" height="70px">
+                        <p style="width: 300px; text-align: left; margin-left: 10px;">
+                            <a href="">
+                                Ajouter un mode de paiement
+                                (Cartes de crédit ou de débit, compte bancaire ou autres)
+                            </a>
+                        </p>
+                    </div>
+                    <hr>
+                    <div class="d-flex">
+                        <img src="./add.png" alt="" height="70px">
+                        <p style="width: 300px; text-align: left; margin-left: 10px;">
+                            <a href="">
+                                Ajouter un mode de paiement
+                                (Cartes de crédit ou de débit, compte bancaire ou autres)
+                            </a>
+                        </p>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+            <div class="flex align-items-center text-center"
+                style="width: 700px; height: 500px; background-color: white;">
+                <div class="d-flex flex-column align-items-center m-auto">
+                    <p>Vous n'avez aucun mode de paiement enregistré.</p>
+                    <button>Ajouter un mode de payement</button>
+                </div>
+            </div>
+            <div class="flex" style="width: 800px; background-color: white;">
+                <div class="" style="padding: 30px;">
+                    <h3>Ajoutez une nouvelle méthode de paiement</h3>
+                    <hr>
+                    <div class="d-flex flex-column">
+                        <div class="d-flex">
+                            <div style="width: 550px; text-align: left; margin-left: 10px;">
+                                <h4>Ajoutez votre cynet pay</h4>
+                                <p>
+                                    Vous aurez besoin de votre IBAN et code BIC pour ajouter
+                                    votre compte bancaire et payer par prélèvement. Cette information
+                                    est présente sur votre relevé de compte ou disponible en contactant
+                                    votre banque.Plus d'informations
+                                </p>
+                                <button>Ajouter un compte</button>
+                            </div>
+                            <img src="./add.png" alt="" height="70px" style="margin-left: 50px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!--
+    <form>
+        <fieldset>
+            <legend>CyberPay</legend>
+
+            <label for="cynetpay_nom_carte">Nom sur la carte :</label>
+            <input type="text" id="cynetpay_nom_carte" name="cynetpay_nom_carte"><br>
+
+            <label for="cynetpay_numero_carte">Numéro de carte :</label>
+            <input type="text" id="cynetpay_numero_carte" name="cynetpay_numero_carte"><br>
+
+            <label for="cynetpay_expiration">Date d'expiration (MM/AA) :</label>
+            <input type="text" id="cynetpay_expiration" name="cynetpay_expiration"><br>
+
+            <label for="cynetpay_cvv">CVV :</label>
+            <input type="text" id="cynetpay_cvv" name="cynetpay_cvv"><br>
+
+            <br>
+
+            <label for="cynetpay_par_defaut">
+                <input type="checkbox" id="cynetpay_par_defaut" name="cynetpay_par_defaut" value="true">
+                Utiliser CyberPay par défaut
+            </label>
+        </fieldset>
+    </form>
+
+    <form>
+        <fieldset>
+            <legend>Stripe</legend>
+
+            <label for="stripe_nom_carte">Nom sur la carte :</label>
+            <input type="text" id="stripe_nom_carte" name="stripe_nom_carte"><br>
+
+            <label for="stripe_numero_carte">Numéro de carte :</label>
+            <input type="text" id="stripe_numero_carte" name="stripe_numero_carte"><br>
+
+            <label for="stripe_expiration">Date d'expiration (MM/AA) :</label>
+            <input type="text" id="stripe_expiration" name="stripe_expiration"><br>
+
+            <label for="stripe_cvv">CVV :</label>
+            <input type="text" id="stripe_cvv" name="stripe_cvv"><br>
+
+            <br>
+
+            <label for="stripe_par_defaut">
+                <input type="checkbox" id="stripe_par_defaut" name="stripe_par_defaut" value="true">
+                Utiliser Stripe par défaut
+            </label>
+        </fieldset>
+    </form>
+
+    <form>
+        <fieldset>
+            <legend>PayPal</legend>
+
+            <label for="paypal_nom_client">Nom du client :</label>
+            <input type="text" id="paypal_nom_client" name="paypal_nom_client"><br>
+
+            <label for="paypal_adresse_client">Adresse du client :</label>
+            <input type="text" id="paypal_adresse_client" name="paypal_adresse_client"><br>
+
+            <br>
+
+            <label for="paypal_par_defaut">
+                <input type="checkbox" id="paypal_par_defaut" name="paypal_par_defaut" value="true">
+                Utiliser PayPal par défaut
+            </label>
+        </fieldset>
+    </form>
+-->
+
+</body>
+
+</html>

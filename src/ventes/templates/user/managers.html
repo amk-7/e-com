@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="flex flex-col items-center mb-12 space-y-4">
+        <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+        Liste des employés
+        </h2>  
+    </div>
+    {% if not managers %}
+        <h3 class="text-center">Il n'y aucun client dans la boutique.</h3>
+    {% else %}
+    <form action="{% url 'accounts:signup' %}" method="get" class="mb-8">
+        {% csrf_token %}
+        <button type="submit"
+          class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+          aria-label="Delete">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-plus-lg"
+            viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z" />
+          </svg>
+        </button>
+      </form>
+      <div class="w-full overflow-hidden rounded-lg shadow-xs">
+        <div class="w-full overflow-x-auto">
+          <table class="w-full whitespace-no-wrap">
+            <thead>
+              <tr
+                class="text-xs text-center font-semibold tracking-wide items-center text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
+              >
+                <th class="px-4 py-3">Nom</th>
+                <th class="px-4 py-3">Prénom</th>
+                <th class="px-4 py-3">Nom utilisateur</th>
+                <th class="px-4 py-3">Contacts</th>
+                <th class="px-4 py-3">Adresse</th>
+                <th class="px-4 py-3">Email</th>
+                <th class="px-4 py-3">Activé</th>
+                <th class="px-4 py-3">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                {% for manager in managers %}
+                    <tr class="text-gray-700 dark:text-gray-400 text-center items-center">
+                        <td class="px-4 py-3 text-sm">{{ manager.user.first_name }}</td>
+                        <td class="px-4 py-3 text-sm">{{ manager.user.last_name }}</td>
+                        <td class="px-4 py-3 text-sm">{{ manager.user.username }}</td>
+                        <td class="px-4 py-3 text-sm">{{ manager.contact }}</td>
+                        <td class="px-4 py-3 text-sm">
+                            {{manager.showAdresse}}
+                        </td>
+                        <td class="px-4 py-3 text-sm">{{ manager.user.email }}</td>
+                        <td class="px-4 py-3 text-sm">
+                            <div class="flex flex-col" id="manager_enable{{ manager.id }}">
+                              <input type="checkbox" name="enableManager" id="" onclick="changeManagerState('{{ manager.id }}')" {% if article.isEnable %} checked {% endif %}>
+                              <span>{{ manager.showState }}</span>
+                            </div>
+                        </td>
+                        <td class="px-4 py-3 text-sm flex justify-between">
+                            <form action="{% url 'accounts:signup' %}" method="post">
+                                {% csrf_token %}
+                                <input type="text" name="id" value="{{ manager.id }}" hidden>
+                                <button type="submit"
+                                  class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                                  aria-label="Delete">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                                    class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                                  </svg>
+                                </button>
+                            </form>
+                            <a href="{% url 'ventes:manager-delete' manager.id %}"
+                                class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                                aria-label="Delete">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-plus-lg"
+                                viewBox="0 0 16 16">
+                                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
+                                </svg>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    {% endif %}
+{% endblock %}
+{% block scripts%}
+  <script>
+    function changeManagerState(id){
+      $.ajax({
+          type: 'POST',
+          url: `/boutique/change_manager_state/${id}/`,
+          data: {
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+          },
+          success: function(reponse){
+            let enable = "désactivé";
+            if (reponse.enable){
+              enable = "activé";
+            }
+            $(`#manager_enable${id}`).children()[0].checked = reponse.enable;
+            $(`#manager_enable${id}`).children()[1].innerText = enable;
+          },
+          error: function(xhr, textStatus, errorThrown){
+            console.log(errorThrown);
+          }
+      });
+    }
+  </script>
+{% endblock %}

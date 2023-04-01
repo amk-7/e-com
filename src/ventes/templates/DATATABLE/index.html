@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
+    <script src="https://cdn.datatables.net/datetime/1.3.1/js/dataTables.dateTime.min.js"></script>
+
+
+    <script src="https://cdn.datatables.net/buttons/2.3.5/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.5/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.5/js/buttons.colVis.min.js"></script>
+
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/datetime/1.3.1/css/dataTables.dateTime.min.css">
+
+    <!-- CSS de Buttons -->
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+
+
+
+    <style>
+        .dataTables_filter {
+            display: none;
+            /*Masquer l'input search par défaut de DataTables*/
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+
+        var minDate, maxDate, minDate1, maxDate1;
+
+
+        $(document).ready(function () {
+            var user = $('#example tbody tr:eq(0) td:eq(2)').text();
+            var email = $('#example tbody tr:eq(0) td:eq(2)').text();
+            console.log(user);
+            // Create date inputs
+            minDate = new DateTime($('#min'), {
+                format: 'MMMM Do YYYY'
+            });
+            maxDate = new DateTime($('#max'), {
+                format: 'MMMM Do YYYY'
+            });
+
+            // Create date inputs
+            minDate1 = new DateTime($('#min1'), {
+                format: 'MMMM Do YYYY'
+            });
+            maxDate1 = new DateTime($('#max1'), {
+                format: 'MMMM Do YYYY'
+            });
+
+            // DataTables initialisation
+            var table = $('#example').DataTable({
+                "bLengthChange": false, // Masque l'élément "Show"
+                "bFilter": true, // Masque l'élément "Search"
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Exporter en Excel',
+                        filename: 'nom_de_fichier',
+                        exportOptions: {
+                            modifier: {
+                                selected: null // Exporter toutes les lignes
+                            }
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        exportOptions: {
+                            modifier: {
+                                selected: null // Exporter toutes les lignes
+                            },
+                            columns: ':visible'
+                        },
+                        customize: function (doc) {
+                            // Ajouter le texte "nom : <nom>" en dessous du titre
+                            doc.content.splice(1, 0, { text: 'nom: '+user, margin: [0, 0, 0, 4] });
+
+                            // Ajouter le texte "email: <email>" en dessous du nom
+                            doc.content.splice(2, 0, { text: 'email: '+email, margin: [0, 0, 0, 4] });
+                        }
+
+                    },
+                ],
+                columnDefs: [
+                    {
+                        targets: [1,2],
+                        visible: false
+                    }
+                ],
+            });
+
+            // DataTables initialisation
+            var table1 = $('#example1').DataTable({
+                "bLengthChange": false, // Masque l'élément "Show"
+                "bFilter": true, // Masque l'élément "Search"
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Exporter en Excel',
+                        filename: 'nom_de_fichier',
+                        exportOptions: {
+                            modifier: {
+                                selected: null // Exporter toutes les lignes
+                            }
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        exportOptions: {
+                            modifier: {
+                                selected: null // Exporter toutes les lignes
+                            }
+                        }
+                    },
+                ],
+                columnDefs: [
+                    {
+                        targets: [1, 2],
+                        visible: false
+                    }
+                ],
+            });
+
+            // Refilter the table
+            $('#min, #max').on('change', function () {
+                $.fn.dataTable.ext.search.push(
+                    function (settings, data, dataIndex) {
+                        var min = minDate.val();
+                        var max = maxDate.val();
+                        var date = new Date(data[4]);
+
+                        if (
+                            (min === null && max === null) ||
+                            (min === null && date <= max) ||
+                            (min <= date && max === null) ||
+                            (min <= date && date <= max)
+                        ) {
+                            return true;
+                        }
+                        return false;
+                    }
+                );
+                table.draw();
+            });
+
+            // // Refilter the table
+            $('#min1, #max1').on('change', function () {
+                $.fn.dataTable.ext.search.push(
+                    function (settings, data, dataIndex) {
+                        var min = minDate1.val();
+                        var max = maxDate1.val();
+                        var date = new Date(data[4]);
+
+                        if (
+                            (min === null && max === null) ||
+                            (min === null && date <= max) ||
+                            (min <= date && max === null) ||
+                            (min <= date && date <= max)
+                        ) {
+                            return true;
+                        }
+                        return false;
+                    }
+                );
+                table1.draw();
+            });
+
+
+
+            $('#search').keyup(function () {
+                $('#example').DataTable().search($(this).val()).draw();
+                //alert("Okay");
+            });
+
+            $('#search1').keyup(function () {
+                $('#example1').DataTable().search($(this).val()).draw();
+                //alert("Okay");
+            });
+
+            $('#excel_import').on('click', function () {
+                $('.buttons-excel').filter('[aria-controls="example"]').click();
+            });
+
+            $('#excel_import_1').on('click', function () {
+                $('.buttons-excel').filter('[aria-controls="example1"]').click();
+            });
+
+        });
+
+    </script>
+    <table cellspacing="5" cellpadding="5" border="0">
+        <thead>
+            <tr style="text-align: left;">
+                <th>Start Date <span style="color: red">*</span></th>
+                <th>End Date <span style="color: red">*</span></th>
+                <th>Currency <span style="color: red">*</span></th>
+                <th>Search</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type="text" id="min" name="min"></td>
+                <td><input type="text" id="max" name="max"></td>
+                <td>
+                    <select name="currency" id="currency">
+                        <option value="">Select Currency</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="search" name="search" id="search">
+                </td>
+                <td>
+                    <button id="excel_import">Export</button>
+                    <button id="excel_pdf">Pdf</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table id="example" class="display nowrap" style="width:100%">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Office</th>
+                <th>Age</th>
+                <th>Start date</th>
+                <th>Salary</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Tiger Nixon</td>
+                <td>System Architect</td>
+                <td>Edinburgh</td>
+                <td>61</td>
+                <td>2011-04-25</td>
+                <td>$320,800</td>
+            </tr>
+            <tr>
+                <td>Lael Greer</td>
+                <td>Systems Administrator</td>
+                <td>London</td>
+                <td>21</td>
+                <td>2009-02-27</td>
+                <td>$103,500</td>
+            </tr>
+            <tr>
+                <td>Michael Bruce</td>
+                <td>Javascript Developer</td>
+                <td>Singapore</td>
+                <td>29</td>
+                <td>2011-06-27</td>
+                <td>$183,000</td>
+            </tr>
+            <tr>
+                <td>Donna Snider</td>
+                <td>Customer Support</td>
+                <td>New York</td>
+                <td>27</td>
+                <td>2011-01-25</td>
+                <td>$112,000</td>
+            </tr>
+        </tbody>
+
+    </table>
+
+    <table cellspacing="5" cellpadding="5" border="0">
+        <thead>
+            <tr style="text-align: left;">
+                <th>Start Date <span style="color: red">*</span></th>
+                <th>End Date <span style="color: red">*</span></th>
+                <th>Search</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type="text" id="min1" name="min1"></td>
+                <td><input type="text" id="max1" name="max1"></td>
+                <td>
+                    <input type="search" name="search1" id="search1">
+                </td>
+                <td>
+                    <button id="excel_import_1">Export</button>
+                    <button id="excel_pdf_1">Pdf</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table id="example1" class="display nowrap" style="width:100%">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Office</th>
+                <th>Age</th>
+                <th>Start date</th>
+                <th>Salary</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Tiger Nixon</td>
+                <td>System Architect</td>
+                <td>Edinburgh</td>
+                <td>61</td>
+                <td>2011-04-25</td>
+                <td>$320,800</td>
+            </tr>
+            <tr>
+                <td>Lael Greer</td>
+                <td>Systems Administrator</td>
+                <td>London</td>
+                <td>21</td>
+                <td>2009-02-27</td>
+                <td>$103,500</td>
+            </tr>
+            <tr>
+                <td>Michael Bruce</td>
+                <td>Javascript Developer</td>
+                <td>Singapore</td>
+                <td>29</td>
+                <td>2011-06-27</td>
+                <td>$183,000</td>
+            </tr>
+        </tbody>
+
+    </table>
+</body>
+
+</html>
